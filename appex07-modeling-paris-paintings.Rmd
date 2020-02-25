@@ -1,0 +1,71 @@
+---
+title: "Modeling Paris Paintings"
+author: ""
+date: ""
+output: 
+  html_document:
+    toc: true
+    number_sections: false
+    toc_float: true
+    df_print: paged
+---
+
+```{r set-up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      comment = "#>", highlight = TRUE,
+                      fig.align = "center")
+```
+
+# Getting started
+
+1. Clone your repo `appex07-[github_name]` to create a new project
+   in RStudio Cloud under the STA 199 class space.
+
+2. Configure git
+      ```{r config-git-ex, eval=FALSE}
+      library(usethis)
+      use_git_config(user.name="your name", user.email="your email")
+      ```
+
+# Packages and Data
+
+```{r packages}
+library(tidyverse)
+library(broom)
+```
+
+```{r load-data, message=FALSE}
+paris_paintings <- read_csv("data/paris_paintings.csv", 
+                            na = c("n/a", "", "NA"))
+```
+
+# Tasks
+
+## Task 1
+
+Fit a multiple linear regression model with the following main effects: 
+`lrgfont`, `Height_in`, `Width_in`, and `relig`.
+
+Interpret each of the estimated model coefficients.
+
+
+
+## Task 2
+
+Fit a multiple linear regression model with main effects for 
+`Height_in` and `lrgfont`, as well as their interaction.
+
+What is the model equation for paintings where the dealer devotes an 
+additional paragraph? How about for paintings where the dealer does NOT devote 
+an additional paragraph?
+
+
+
+# Submission
+
+## Stage, commit and push
+
+1. Stage your modified files.
+2. Commit your changes with an informative message.
+3. Push your changes to your GitHub repo.
+4. Verify your files were updated on GitHub.
