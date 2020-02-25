@@ -1,7 +1,7 @@
 ---
 title: "Modeling Paris Paintings"
-author: ""
-date: ""
+author: "Rami Sbahi"
+date: "February 25, 2020"
 output: 
   html_document:
     toc: true
@@ -37,6 +37,8 @@ library(broom)
 ```{r load-data, message=FALSE}
 paris_paintings <- read_csv("data/paris_paintings.csv", 
                             na = c("n/a", "", "NA"))
+
+?paris_paintings
 ```
 
 # Tasks
@@ -48,6 +50,30 @@ Fit a multiple linear regression model with the following main effects:
 
 Interpret each of the estimated model coefficients.
 
+```{r multiple-reg}
+m_main <- paris_paintings %>%
+  lm(log(price) ~ factor(lrgfont) + Height_in + Width_in + factor(relig), data = .)
+
+m_main %>%
+  tidy() %>%
+  mutate(exp_estimate = exp(estimate)) %>%
+  select(term, estimate, exp_estimate)
+```
+
+Non-religious paintings without a large font, with a surface are of 0 square 
+inches, are expected to have a price of $98.65.
+
+All else held constant, painting with a large font is expected, on average, to 
+have a log(price) 2.572 greater than one without.
+
+All else held constant, a religious painting is expected, on average, to have a 
+log(price) 0.519 less than one which isn't.
+
+All else held constant, for every additional inch in height, log(price) is 
+expected, on average, to decrease by 0.00856.
+
+All else held constant, or every additional inch in width, log(price) is 
+expected, on average, to increase by 0.021.
 
 
 ## Task 2
@@ -59,7 +85,23 @@ What is the model equation for paintings where the dealer devotes an
 additional paragraph? How about for paintings where the dealer does NOT devote 
 an additional paragraph?
 
+```{r interaction}
+m_int <- lm(log(price) ~ Height_in + lrgfont + Height_in*lrgfont, data = paris_paintings)
 
+m_int %>%
+  tidy() %>%
+  select(term, estimate)
+```
+
+Total equation:
+$$\widehat{\mbox{log(price)}} = 4.676 + 0.00511~\mbox{Height_in} + 
+2.172~\mbox{lrgfont} + 0.0185 * \mbox{Height_in} * \mbox{lrgfnt}$$
+
+Additional paragraph (assuming this means lrgfont = 1)
+$$\widehat{\mbox{log(price)}} = 6.848 + 0.02361~\mbox{Height_in}$$
+
+No additional paragraph (assuming this means lrgfont = 0)
+$$\widehat{\mbox{log(price)}} = 4.676 + 0.00511~\mbox{Height_in}$$
 
 # Submission
 
